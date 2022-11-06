@@ -2,21 +2,43 @@
   "name": "@enflujo/alquimia",
   "version": "0.0.1",
   "description": "Librería de JS para operaciones comunes del laboratorio.",
-  "main": "libreria/alquimia.js",
-  "module": "libreria/alquimia.modulos.js",
+  "main": "libreria/alquimia.cjs",
+  "module": "libreria/modulos/alquimia.js",
   "bundle": "libreria/alquimia.min.js",
+  "source": "fuente/alquimia.ts",
   "license": "MIT",
+  "type": "module",
+  "types": "libreria/modulos/alquimia.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./libreria/modulos/alquimia.d.ts",
+        "default": "./libreria/modulos/alquimia.js"
+      },
+      "require": {
+        "types": "./libreria/modulos/alquimia.d.ts",
+        "default": "./libreria/alquimia.cjs"
+      }
+    }
+  },
   "scripts": {
-    "dev": "rollup -cw",
+    "dev": "yarn limpiar && node --experimental-json-modules conjuro.js --desarrollo",
+    "build": "yarn limpiar && node --experimental-json-modules conjuro.js && yarn tipos",
+    "tipos": "tsc --emitDeclarationOnly --outDir libreria/modulos",
+    "limpiar": "rimraf libreria",
     "lint": "prettier --check .",
     "lint:fix": "prettier --write --list-different ."
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^8.3.2",
-    "@types/node": "^17.0.31",
-    "rollup": "^2.71.1",
-    "tslib": "^2.4.0",
-    "typescript": "^4.6.4"
-  },
-  "dependencies": {}
+    "@types/geojson": "^7946.0.10",
+    "@types/node": "^18.11.9",
+    "cli-color": "^2.0.3",
+    "esbuild": "^0.15.13",
+    "esbuild-plugin-replace": "^1.3.0",
+    "geojson": "^0.5.0",
+    "node-emoji": "^1.11.0",
+    "rimraf": "^3.0.2",
+    "tslib": "^2.4.1",
+    "typescript": "^4.8.4"
+  }
 }
