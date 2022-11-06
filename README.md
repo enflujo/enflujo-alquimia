@@ -117,15 +117,14 @@ console.log(convertirEscala(50, 0, 100, 100, 200));
 
 La librería está disponible como paquete que se puede importar de manera directa en HTML y queda disponible en JavaScript como objeto global con el nombre de `alquimia`.
 
-A diferencia de las otras versiones, acá se va a descargar la librería completa en el explorador. Es útil para hacer ejercicios sencillos con los estudiantes sin tener que enseñarles a usar NPM o algún empaquetador. Acá se se importa como `<script>` y ya está.
+A diferencia de las otras versiones, acá se va a descargar la librería completa en el explorador. Es útil para hacer ejercicios sencillos con los estudiantes sin tener que enseñarles a usar NPM o algún empaquetador. Acá se importa como `<script>` y ya está.
 
-De momento la librería no está en un CDN entonces se puede descargar directo desde Github [alquimia.min.js](../../libreria/alquimia.min.js).
+De momento la librería no está en un CDN entonces se puede descargar directo desde Github [alquimia.min.js](https://raw.githubusercontent.com/enflujo/enflujo-alquimia/principal/libreria/alquimia.min.js).
 
 Un ejemplo de la estructura básica de un proyecto de HTML:
 
 ```md
 - ejemplo/
-  - alquimia.min.js
   - index.html
   - programa.js
 ```
@@ -143,7 +142,7 @@ Algo así sería el archivo `index.html`:
   </head>
   <body>
     <!-- Importar la librería antes de usarla.  -->
-    <script src="./alquimia.min.js"></script>
+    <script src="https://raw.githubusercontent.com/enflujo/enflujo-alquimia/principal/libreria/alquimia.min.js"></script>
 
     <!-- Queda disponible de manera global y se puede usar en otros archivos JS. -->
     <script src="./programa.js"></script>
