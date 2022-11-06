@@ -119,7 +119,11 @@ La librería está disponible como paquete que se puede importar de manera direc
 
 A diferencia de las otras versiones, acá se va a descargar la librería completa en el explorador. Es útil para hacer ejercicios sencillos con los estudiantes sin tener que enseñarles a usar NPM o algún empaquetador. Acá se importa como `<script>` y ya está.
 
-De momento la librería no está en un CDN entonces se puede descargar directo desde Github [alquimia.min.js](https://raw.githubusercontent.com/enflujo/enflujo-alquimia/principal/libreria/alquimia.min.js).
+La librería está en el CDN JSDelivr: [alquimia.min.js](https://cdn.jsdelivr.net/gh/enflujo/enflujo-alquimia/libreria/alquimia.min.js)
+
+```bash
+https://cdn.jsdelivr.net/gh/enflujo/enflujo-alquimia/libreria/alquimia.min.js
+```
 
 Un ejemplo de la estructura básica de un proyecto de HTML:
 
@@ -142,7 +146,7 @@ Algo así sería el archivo `index.html`:
   </head>
   <body>
     <!-- Importar la librería antes de usarla.  -->
-    <script src="https://raw.githubusercontent.com/enflujo/enflujo-alquimia/principal/libreria/alquimia.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/enflujo/enflujo-alquimia/libreria/alquimia.min.js"></script>
 
     <!-- Queda disponible de manera global y se puede usar en otros archivos JS. -->
     <script src="./programa.js"></script>
