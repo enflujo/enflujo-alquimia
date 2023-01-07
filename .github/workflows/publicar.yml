@@ -21,7 +21,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Exportar librería
         run: yarn build
-      - name: :elephant: 🐘 Publicar
+      - name: 🐘 Publicar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
