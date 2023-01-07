@@ -28,9 +28,9 @@ const configuracionGeneral = {
  */
 const configuracionESM = {
   ...configuracionGeneral,
-  outdir: 'libreria/modulos',
+  outdir: 'libreria',
   sourcemap: true,
-  minify: true,
+  minify: false,
   splitting: true,
   format: 'esm',
 };
