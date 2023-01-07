@@ -2,6 +2,7 @@ export * from './matematica/indice';
 export * from './color/indice';
 export * from './mapas/indice';
 export * from './html/indice';
+export * from './node/indice';
 
 export const version = '__VERSION_ACTUAL__';
 
