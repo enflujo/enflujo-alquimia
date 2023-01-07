@@ -1,13 +1,17 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["DOM", "ESNext"],
+    "lib": ["ESNext"],
     "outDir": "./libreria/modulos",
+    "resolveJsonModule": true,
+    "module": "CommonJS",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "esModuleInterop": true,
     "strict": true,
-    "declaration": true
+    "declaration": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["fuente/**/*"]
 }

@@ -3,27 +3,16 @@
   "version": "0.0.0-development",
   "description": "Librería de JS para operaciones comunes del laboratorio.",
   "main": "libreria/alquimia.cjs",
-  "module": "libreria/modulos/alquimia.js",
+  "module": "libreria/alquimia.js",
   "bundle": "libreria/alquimia.min.js",
   "source": "fuente/alquimia.ts",
   "license": "MIT",
   "type": "module",
   "types": "libreria/modulos/alquimia.d.ts",
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./libreria/modulos/alquimia.d.ts",
-        "default": "./libreria/modulos/alquimia.js"
-      },
-      "require": {
-        "types": "./libreria/modulos/alquimia.d.ts",
-        "default": "./libreria/alquimia.cjs"
-      }
-    }
-  },
   "scripts": {
     "dev": "yarn limpiar && node --experimental-json-modules conjuro.js --desarrollo",
     "build": "yarn limpiar && node --experimental-json-modules conjuro.js && yarn tipos",
+    "build2": "cross-env NODE_ENV=production tsup-node",
     "tipos": "tsc --emitDeclarationOnly --outDir libreria/modulos",
     "limpiar": "rimraf libreria",
     "lint": "prettier --check .",
@@ -31,6 +20,9 @@
     "semantic-release": "semantic-release",
     "actualizar": "cz"
   },
+  "files": [
+    "libreria"
+  ],
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.2",
     "@semantic-release/git": "^10.0.1",
@@ -54,15 +46,21 @@
   "release": {
     "branches": [
       "principal"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/changelog",
+        {
+          "changelogFile": "HISTORIAL.md"
+        }
+      ],
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      "@semantic-release/git"
     ]
   },
-  "plugins": [
-    "@semantic-release/commit-analyzer",
-    "@semantic-release/release-notes-generator",
-    "@semantic-release/npm",
-    "@semantic-release/github",
-    "@semantic-release/git"
-  ],
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
