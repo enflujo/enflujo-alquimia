@@ -1,6 +1,6 @@
 {
   "name": "@enflujo/alquimia",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Librería de JS para operaciones comunes del laboratorio.",
   "main": "libreria/alquimia.cjs",
   "module": "libreria/alquimia.js",
