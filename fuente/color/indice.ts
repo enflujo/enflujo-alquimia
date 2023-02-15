@@ -1,7 +1,7 @@
 import { convertirEscala } from '../matematica/indice';
 
 export const hexARGB = (valor: string): number[] | null => {
-  valor = valor.includes('#') ? valor.replace('#', '') : valor;
+  valor = valor.includes('#') ? valor.trim().replace('#', '') : valor.trim();
 
   if (valor.length === 3) {
     valor = valor[0] + valor[0] + valor[1] + valor[1] + valor[2] + valor[2];
