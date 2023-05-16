@@ -1,4 +1,4 @@
-import { build } from 'esbuild';
+import { build, context } from 'esbuild';
 import { replace } from 'esbuild-plugin-replace';
 import { cartel } from './utilidades/cartel.js';
 import { logAviso, logCyan, logError, logVerde } from './utilidades/constantes.js';
@@ -68,19 +68,7 @@ const configuracionCJS = {
 };
 
 if (enDesarrollo) {
-  /**
-   * Iniciar modo de desarrollo con `yarn dev`.
-   * Sólo exporta la versión ESM que es la única que se necesita para hacer pruebas.
-   */
-  build({
-    ...configuracionESM,
-    watch: {
-      onRebuild(error, result) {
-        if (error) logError('Problemas:', error);
-        else logVerde('Código actualizado', result);
-      },
-    },
-  }).then(() => logAviso('En desarrollo!'));
+  servidorDesarrollo();
 } else {
   /**
    * Crear los archivos y salir cuando se corre con `yarn build`, es decir, en modo de producción.
@@ -96,4 +84,40 @@ if (enDesarrollo) {
   build(configuracionESM)
     .then(() => logCyan('Procesado ESM'))
     .catch(() => process.exit(1));
+}
+
+async function servidorDesarrollo() {
+  /**
+   * Iniciar modo de desarrollo con `yarn dev`.
+   * Sólo exporta la versión ESM que es la única que se necesita para hacer pruebas.
+   */
+
+  const extensiones = [
+    {
+      name: 'recargar',
+      setup(build) {
+        let conteo = 0;
+        build.onEnd((resultado) => {
+          if (resultado.errors) {
+            resultado.errors.forEach((error) => {
+              logError('Problemas:', error);
+            });
+          }
+
+          if (resultado.warings) {
+            resultado.warings.forEach((aviso) => {
+              logAviso(aviso);
+            });
+          }
+          if (++conteo < 2) return;
+          logVerde('Código actualizado');
+        });
+      },
+    },
+  ];
+
+  const contexto = await context({ ...configuracionESM, plugins: extensiones });
+  logAviso('En desarrollo!');
+  await contexto.watch();
+  // await contexto.dispose();
 }

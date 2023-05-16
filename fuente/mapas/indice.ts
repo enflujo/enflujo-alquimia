@@ -1,6 +1,6 @@
 import { PI_CUARTO, aRadianes } from '../matematica/indice';
-import { IMapearCoordenadas, Punto } from '../tipos';
-import { Position } from 'geojson';
+import type { IMapearCoordenadas, Punto } from '../tipos';
+import type { Feature, FeatureCollection, Geometry, MultiPolygon, Polygon, Position } from 'geojson';
 
 export const mercatorY = (latitud: number): number => Math.log(Math.tan(latitud / 2 + PI_CUARTO));
 
@@ -63,24 +63,26 @@ const crearSeccionSvg = (
  * `L` = _lineTo_ (Punto de una línea. `L{punto.x} {punto.y}`)
  *
  * `Z` = _closePath_ (Fin del _path_. `Z`)
- * @param coordenadas Array de coordenadas
+ * @param geometria Array de coordenadas
  * @param mapearCoordenadas Función para mapear de latitud, longitud a pixeles.
+ * @param ancho Ancho en pixeles del contenedor.
+ * @param alto Alto en pixeles del contenedor.
  * @returns res contiene los datos de los elementos SVG<path>
  */
 export const crearLinea = (
-  coordenadas: Position[][] | Position[][][],
+  geometria: Polygon | MultiPolygon,
   mapearCoordenadas: IMapearCoordenadas,
   ancho: number,
   alto: number
 ): string => {
   let res = '';
 
-  coordenadas.forEach((grupo: Position[] | Position[][]): void => {
-    grupo.forEach((punto: Position | Position[], i: number) => {
+  geometria.coordinates.forEach((grupo): void => {
+    grupo.forEach((posicion, i) => {
       const cabeza = i === 0 ? 'M' : 'L';
 
-      if (typeof punto[0] === 'object') {
-        (punto as Position[]).forEach((puntoMulti: Position, j: number): void => {
+      if (typeof posicion[0] === 'object') {
+        (posicion as Position[]).forEach((puntoMulti: Position, j: number): void => {
           if (j === 0) {
             res += crearSeccionSvg(puntoMulti, 'M', mapearCoordenadas, ancho, alto);
           } else {
@@ -88,7 +90,7 @@ export const crearLinea = (
           }
         });
       } else {
-        res += crearSeccionSvg(punto as Position, cabeza, mapearCoordenadas, ancho, alto);
+        res += crearSeccionSvg(posicion as Position, cabeza, mapearCoordenadas, ancho, alto);
       }
 
       res += i === grupo.length - 1 ? 'Z' : '';
@@ -96,4 +98,51 @@ export const crearLinea = (
   });
 
   return res;
+};
+
+/**
+ * Extrae los extremos del area contenida en datos GeoJSON
+ *
+ * @param geojson - Datos en GeoJSON
+ */
+
+export const extremosLugar = (geojson: Feature | FeatureCollection) => {
+  let latitudMin = Infinity;
+  let latitudMax = -Infinity;
+  let longitudMin = Infinity;
+  let longitudMax = -Infinity;
+
+  if (geojson.type === 'FeatureCollection') {
+    geojson.features.forEach((area) => {
+      extrearDeGeometria(area.geometry);
+    });
+  } else if (geojson.type === 'Feature') {
+    extrearDeGeometria(geojson.geometry);
+  }
+
+  function extraer(areas: Position[]) {
+    areas.forEach((punto) => {
+      const [longitud, latitud] = punto;
+      longitudMin = longitudMin > longitud ? longitud : longitudMin;
+      longitudMax = longitudMax < longitud ? longitud : longitudMax;
+      latitudMin = latitudMin > latitud ? latitud : latitudMin;
+      latitudMax = latitudMax < latitud ? latitud : latitudMax;
+    });
+  }
+
+  function extrearDeGeometria(geometria: Geometry) {
+    if (geometria.type === 'Polygon') {
+      geometria.coordinates.forEach((posiciones) => {
+        extraer(posiciones);
+      });
+    } else if (geometria.type === 'MultiPolygon') {
+      geometria.coordinates.forEach((grupo) => {
+        grupo.forEach((posiciones) => {
+          extraer(posiciones);
+        });
+      });
+    }
+  }
+
+  return { latitudMin, latitudMax, longitudMin, longitudMax };
 };
